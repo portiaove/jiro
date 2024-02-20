@@ -1,0 +1,72 @@
+label {
+  cursor: pointer;
+}
+
+.form-control {
+  padding: 0.9em;
+  caret-color: #333;
+  &:not(select) {
+    padding: 1.75em 0.75rem 0 5px;
+  }
+  width: calc(100% - (0.75rem + 5px));
+  border-radius: 2px;
+  border: 2px solid transparent;
+  border-bottom: 2px solid #cfcfcf;
+  background: rgb(242, 242, 243);
+  font-size: 16px;
+}
+
+.form-control:focus {
+  outline: none;
+}
+.form-group {
+  position: relative;
+  height: 56px;
+}
+
+.form-control-placeholder {
+  position: absolute;
+  bottom: 1.25em;
+  left: 0;
+  padding: 7px 0 0 13px;
+  transition: all 250ms;
+  opacity: 0.75;
+}
+span.error-msg {
+  color: #e02020;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.5s;
+  opacity: 0;
+}
+.form-control:focus + .form-control-placeholder,
+.form-control:valid:not(:placeholder-shown) + .form-control-placeholder,
+.form-control:not(:placeholder-shown) + .form-control-placeholder,
+.form-control:invalid:not(:placeholder-shown) + .form-control-placeholder {
+  font-size: 75%;
+  transform: translate3d(0, -100%, 0);
+  opacity: 1;
+}
+.form-control:invalid:not(:placeholder-shown):not(select):not(:focus),
+.form-control.invalid:not(:focus) {
+  border-bottom: 2px solid #f55;
+  caret-color: #f55;
+  + label {
+    color: rgb(224, 32, 32);
+    + .error-msg {
+      opacity: 1;
+    }
+  }
+}
+.form-control:valid:not(:placeholder-shown):not(select),
+.form-control.invalid:not(:focus) {
+  border-bottom: 2px solid #393;
+}
+.form-control:invalid:not(:placeholder-shown):not(select),
+.form-control.invalid {
+  border-bottom: 2px solid #fec940;
+}
+
+.form-control:invalid:focus {
+  border-bottom: 2px solid #cfcfcf;
+}
