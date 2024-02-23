@@ -22,7 +22,7 @@ export const JIRO_FORM_INPUTS = [
     id: "dni",
     name: "dni",
     labelText: "DNI/NIF",
-    pattern: "^[0-9]{8}[a-zA-Z]$",
+    // pattern: "^[A-Va-w][0-9]{8}[A-Z]$|^[0-9]{7}[0-9A-Ja]$",
     errorMessage: "Por favor, introduzco 8 digitos + Letra de control",
     required: true,
   },

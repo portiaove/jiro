@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import InputComponent from "./Input/Input";
 import { JIRO_FORM_INPUTS } from "../constants";
 import FacturaCard from "./FacturaCard/FacturaCard";
@@ -18,18 +18,12 @@ const formContainerStyles = {
 };
 
 const JiroForm = () => {
-  const formRefs = useRef({});
-  const setFormRef = (element) => {
-    if (element) {
-      formRefs.current[element.name] = element;
-    }
-  };
   const [formData, setFormData] = useState({
     name: "",
     surname: "",
     email: "",
     dateOfBirth: "",
-    uploadedFiles: [],
+    facturas: [],
   });
 
   const handleInputChange = (e) => {
@@ -39,36 +33,49 @@ const JiroForm = () => {
     });
   };
 
-  const handleFileUpload = (e) => {
+  const handleFacturaUpload = (e) => {
     const files = Array.from(e.target.files);
+    const factura = {
+      id: formData.facturas.length + 1,
+      file: files[0],
+      direction: "",
+      cp: "",
+      solicitante: null,
+    };
     setFormData({
       ...formData,
-      uploadedFiles: [...formData.uploadedFiles, ...files],
+      facturas: [...formData.facturas, factura],
     });
   };
 
-  const handleRemoveFile = (index) => {
-    const updatedFiles = [...formData.uploadedFiles];
+  const handleFacturaUpdate = (factura) => {
+    const updatedFacturas = [...formData.facturas];
+    const index = updatedFacturas.findIndex((f) => f.id === factura.id);
+    updatedFacturas[index] = factura;
+    setFormData({
+      ...formData,
+      facturas: updatedFacturas,
+    });
+  };
+
+  const handleRemoveFactura = (index) => {
+    const updatedFiles = [...formData.facturas];
     updatedFiles.splice(index, 1);
     setFormData({
       ...formData,
-      uploadedFiles: updatedFiles,
+      facturas: updatedFiles,
     });
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // Acceder a los valores de los campos a través de formRefs.current
-    const formData = Object.keys(formRefs.current).reduce((acc, key) => {
-      acc[key] = formRefs.current[key].value;
-      return acc;
-    }, {});
+
+    console.log(event.target.elements);
+    console.log(event.target.direction.value);
 
     console.log(formData);
-    // Aquí puedes enviar los datos recopilados en formData
   };
 
-  console.log("hola Jiro Form!");
   const fullName = `${formData.name} ${formData.surname}`;
 
   return (
@@ -83,10 +90,10 @@ const JiroForm = () => {
         ))}
 
         <div>
-          <label htmlFor="solicitante" style={{ marginRight: "1rem" }}>
+          <label htmlFor="tipo" style={{ marginRight: "1rem" }}>
             Tipo de usuario:
           </label>
-          <select id="solicitante" defaultValue="particular">
+          <select id="tipo" defaultValue="particular">
             <option value="particular">Particular</option>
             <option value="empresa">Empresa</option>
           </select>
@@ -101,15 +108,20 @@ const JiroForm = () => {
             id="facturas"
             name="facturas"
             multiple
-            onChange={handleFileUpload}
+            onChange={handleFacturaUpload}
             required
           />
         </div>
 
-        {formData.uploadedFiles.length > 0 && (
+        {formData.facturas.length > 0 && (
           <>
-            {formData.uploadedFiles.map((factura, index) => (
-              <FacturaCard factura={factura} nombre={fullName} key={index} />
+            {formData.facturas.map((factura, index) => (
+              <FacturaCard
+                factura={factura}
+                nombre={fullName}
+                key={index}
+                updateFactura={handleFacturaUpdate}
+              />
             ))}
           </>
         )}
